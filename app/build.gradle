@@ -30,37 +30,54 @@ android {
     }
 }
 
+def libraries = [
+        appCompat: "1.1.0",
+        ktx: "1.2.0",
+        constraintlayout: "1.1.3",
+        dagger: "2.26",
+        materialDesign: "1.1.0",
+        lifeCycleExt: "2.2.0",
+        retrofit: "2.7.1",
+        rxjava: "2.2.10",
+        rxandroid: "2.1.1",
+        httpIntercepter: "4.3.1",
+        paging: "2.1.1",
+        glide: "4.11.0",
+        junit: "4.13",
+        junittestExt: "1.1.1",
+        expresso: "3.2.0"
+]
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.appcompat:appcompat:${libraries.appCompat}"
+    implementation "androidx.core:core-ktx:${libraries.ktx}"
+    implementation "androidx.constraintlayout:constraintlayout:${libraries.constraintlayout}"
 
-    implementation "com.google.dagger:dagger:2.26"
-    implementation 'com.google.dagger:dagger-android:2.26'
-    kapt 'com.google.dagger:dagger-compiler:2.26'
-    kapt "com.google.dagger:dagger-android-processor:2.26"
+    implementation "com.google.dagger:dagger:${libraries.dagger}"
+    implementation "com.google.dagger:dagger-android:${libraries.dagger}"
+    kapt "com.google.dagger:dagger-compiler:${libraries.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${libraries.dagger}"
 
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "com.google.android.material:material:${libraries.materialDesign}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${libraries.lifeCycleExt}"
 
-    implementation "com.squareup.retrofit2:retrofit:2.7.1"
-    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.1"
-    implementation "com.squareup.retrofit2:converter-moshi:2.7.1"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation "com.squareup.retrofit2:retrofit:${libraries.retrofit}"
+    implementation "com.squareup.retrofit2:converter-gson:${libraries.retrofit}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${libraries.retrofit}"
+    implementation "com.squareup.retrofit2:converter-moshi:${libraries.retrofit}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${libraries.httpIntercepter}"
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.3.1'
-    implementation "androidx.paging:paging-runtime:2.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:${libraries.rxjava}"
+    implementation "io.reactivex.rxjava2:rxandroid:${libraries.rxandroid}"
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation "androidx.paging:paging-runtime:${libraries.paging}"
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "com.github.bumptech.glide:glide:${libraries.glide}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${libraries.glide}"
 
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "junit:junit:${libraries.junit}"
+    androidTestImplementation "androidx.test.ext:junit:${libraries.junittestExt}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${libraries.expresso}"
 }

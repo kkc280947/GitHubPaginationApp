@@ -1,23 +1,28 @@
 package com.example.githubuserapp.ui.userslist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.githubuserapp.R
 import com.example.githubuserapp.base.BaseFragment
 import com.example.githubuserapp.repository.models.GitHubProfileData
 import com.example.githubuserapp.repository.NetworkState
 import com.example.githubuserapp.repository.Status
+import com.example.githubuserapp.utils.Network.NO_INTERNET_ERROR
+import com.example.githubuserapp.utils.Network.internetIsConnected
 import kotlinx.android.synthetic.main.fragment_user_list.*
 import kotlinx.android.synthetic.main.item_network_state.*
+import javax.inject.Inject
 
 class UserListFragment : BaseFragment<UserListViewModel>(), GitUserViewHolder.OnItemCLicked {
-
 
     companion object {
         fun newInstance() = UserListFragment()
@@ -28,8 +33,6 @@ class UserListFragment : BaseFragment<UserListViewModel>(), GitUserViewHolder.On
             { viewModel.retry() }, this
         )
     }
-
-    private val root: View? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +53,7 @@ class UserListFragment : BaseFragment<UserListViewModel>(), GitUserViewHolder.On
         initNetworkState()
     }
 
+
     private fun initRecyclerUser() {
         recyclerUser.layoutManager = LinearLayoutManager(recyclerUser.context)
         recyclerUser.adapter = mUserListAdapter
@@ -69,23 +73,37 @@ class UserListFragment : BaseFragment<UserListViewModel>(), GitUserViewHolder.On
     }
 
     private fun initData() {
-        if(mUserListAdapter.currentList.isNullOrEmpty()){
+        if (mUserListAdapter.currentList.isNullOrEmpty()) {
             viewModel.onScreenCreated()
             viewModel.userList.observe(viewLifecycleOwner, Observer<PagedList<GitHubProfileData>> {
-                mUserListAdapter.submitList(it)
+                mUserListAdapter.submitList(it) {
+                    val layoutManager = (recyclerUser.layoutManager as LinearLayoutManager)
+                    val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    if (position != RecyclerView.NO_POSITION) {
+                        recyclerUser.scrollToPosition(position)
+                    }
+                }
             })
         }
     }
 
     private fun initInitialLoadScreen() {
         viewModel.getInitialLoadStatus().observe(viewLifecycleOwner, Observer {
-            setInitialLoadingState(it)
+            if (!internetIsConnected(requireContext())) {
+                setInitialLoadingState(NetworkState.error(NO_INTERNET_ERROR))
+            } else {
+                setInitialLoadingState(it)
+            }
         })
     }
 
     private fun initNetworkState() {
         viewModel.getNetworkState().observe(viewLifecycleOwner, Observer<NetworkState> {
-            mUserListAdapter.setNetworkState(it)
+            if (!internetIsConnected(requireContext())) {
+                mUserListAdapter.setNetworkState(NetworkState.error(NO_INTERNET_ERROR))
+            } else {
+                mUserListAdapter.setNetworkState(it)
+            }
         })
     }
 

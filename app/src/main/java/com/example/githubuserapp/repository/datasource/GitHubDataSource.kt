@@ -6,6 +6,7 @@ import androidx.paging.ItemKeyedDataSource
 import com.example.githubuserapp.repository.models.GitHubProfileData
 import com.example.githubuserapp.repository.NetworkState
 import com.example.githubuserapp.api.GitHubApiService
+import com.example.githubuserapp.utils.Network.NO_INTERNET_ERROR
 import com.example.githubuserapp.utils.Network.internetIsConnected
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,17 +42,6 @@ class GitHubDataSource @Inject constructor(private val gitHubApiService: GitHubA
         networkState.postValue(NetworkState.LOADING)
         initialLoad.postValue(NetworkState.LOADING)
 
-        if(!internetIsConnected()){
-            setRetry(Action { loadInitial(params, callback) })
-            val error =
-                NetworkState.error(
-                    "No Internet connection"
-                )
-            networkState.postValue(error)
-            initialLoad.postValue(error)
-            return
-        }
-
         compositeDisposable.add(gitHubApiService.getUsers(0, params.requestedLoadSize).subscribe({ users ->
             setRetry(null)
             networkState.postValue(NetworkState.LOADED)
@@ -70,17 +60,6 @@ class GitHubDataSource @Inject constructor(private val gitHubApiService: GitHubA
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<GitHubProfileData>) {
         networkState.postValue(NetworkState.LOADING)
-
-        if(!internetIsConnected()){
-            setRetry(Action { loadAfter(params, callback) })
-            val error =
-                NetworkState.error(
-                    "No Internet connection"
-                )
-            networkState.postValue(error)
-            return
-        }
-
         //get the users from the api after id
         compositeDisposable.add(gitHubApiService.getUsers(params.key, params.requestedLoadSize).subscribe({ users ->
             setRetry(null)

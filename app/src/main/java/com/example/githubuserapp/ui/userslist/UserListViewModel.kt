@@ -1,6 +1,7 @@
 package com.example.githubuserapp.ui.userslist
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
@@ -11,7 +12,10 @@ import com.example.githubuserapp.repository.datasource.GitHubDataSourceFactory
 import com.example.githubuserapp.repository.NetworkState
 import javax.inject.Inject
 
-class UserListViewModel @Inject constructor(private val gitHubDataSourceFactory: GitHubDataSourceFactory) : ViewModel() {
+class UserListViewModel @Inject constructor(
+    private val gitHubDataSourceFactory: GitHubDataSourceFactory) : ViewModel() {
+
+    var lastVisiblePosition: Int = 0
 
     lateinit var userList: LiveData<PagedList<GitHubProfileData>>
 
@@ -19,15 +23,12 @@ class UserListViewModel @Inject constructor(private val gitHubDataSourceFactory:
         val config = PagedList.Config.Builder()
             .setPageSize(20)
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(20)
+            .setInitialLoadSizeHint( if(lastVisiblePosition==0 || lastVisiblePosition<20) 20 else lastVisiblePosition+20)
             .build()
         userList = LivePagedListBuilder<Long, GitHubProfileData>(gitHubDataSourceFactory, config).build()
+
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        gitHubDataSourceFactory.dispose()
-    }
 
     fun retry() {
         gitHubDataSourceFactory.gitHubDataSourceLiveData.value!!.retry()
@@ -43,5 +44,10 @@ class UserListViewModel @Inject constructor(private val gitHubDataSourceFactory:
         gitHubDataSourceFactory.gitHubDataSourceLiveData
     ) {
         it.initialLoad
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        gitHubDataSourceFactory.dispose()
     }
 }

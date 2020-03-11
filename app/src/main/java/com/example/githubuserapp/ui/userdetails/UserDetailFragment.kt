@@ -1,7 +1,6 @@
 package com.example.githubuserapp.ui.userdetails
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,7 +46,7 @@ class UserDetailFragment: BaseFragment<UserDetailViewModel>(),BaseActivity.OnBac
     }
 
     private fun initUserDetails() {
-        if(internetIsConnected()){
+        if(internetIsConnected(requireContext())){
            observeUserDetails()
         }else{
             createNetworkDialog(getString(R.string.no_internet_connection),getString(R.string.internet_not_connected))
@@ -55,7 +54,7 @@ class UserDetailFragment: BaseFragment<UserDetailViewModel>(),BaseActivity.OnBac
     }
 
     private fun observeUserDetails(){
-        viewModel.getUserDetail(arguments!!.getString(ARGS_USER_ID,"")).observe(viewLifecycleOwner,
+        viewModel.getUserDetail(requireArguments().getString(ARGS_USER_ID,"")).observe(viewLifecycleOwner,
             Observer {
                 updateUserDetailsUI(it)
             })
@@ -89,11 +88,11 @@ class UserDetailFragment: BaseFragment<UserDetailViewModel>(),BaseActivity.OnBac
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Retry") { dialog, _->
+            .setPositiveButton(getString(R.string.retry)) { dialog, _->
                 dialog.dismiss()
                 initUserDetails()
             }
-            .setNegativeButton("Cancel") { dialog, _->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _->
                 dialog.dismiss()
                 onBackPressed()
             }

@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">GitHubUserApp</string>
-    <string name="retry">Retry</string>
     <string name="grid_view">Grid View</string>
     <string name="no_internet_connection">No Internet connection</string>
     <string name="internet_not_connected">It seems your internet is not working</string>
     <string name="n_a">N/A</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -15,18 +15,15 @@ import javax.inject.Inject
 class UserListViewModel @Inject constructor(
     private val gitHubDataSourceFactory: GitHubDataSourceFactory) : ViewModel() {
 
-    var lastVisiblePosition: Int = 0
-
     lateinit var userList: LiveData<PagedList<GitHubProfileData>>
 
     fun onScreenCreated() {
         val config = PagedList.Config.Builder()
             .setPageSize(20)
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint( if(lastVisiblePosition==0 || lastVisiblePosition<20) 20 else lastVisiblePosition+20)
+            .setInitialLoadSizeHint(20)
             .build()
         userList = LivePagedListBuilder<Long, GitHubProfileData>(gitHubDataSourceFactory, config).build()
-
     }
 
 

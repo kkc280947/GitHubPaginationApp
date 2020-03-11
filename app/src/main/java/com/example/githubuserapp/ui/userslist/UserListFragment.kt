@@ -1,11 +1,9 @@
 package com.example.githubuserapp.ui.userslist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +18,6 @@ import com.example.githubuserapp.utils.Network.NO_INTERNET_ERROR
 import com.example.githubuserapp.utils.Network.internetIsConnected
 import kotlinx.android.synthetic.main.fragment_user_list.*
 import kotlinx.android.synthetic.main.item_network_state.*
-import javax.inject.Inject
 
 class UserListFragment : BaseFragment<UserListViewModel>(), GitUserViewHolder.OnItemCLicked {
 
